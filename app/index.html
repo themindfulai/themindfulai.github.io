@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindfulAI</title>
+    <link rel="icon" href="../favicon.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #D1D5DB; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #9CA3AF; }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased overflow-hidden">
+
+    <div class="h-screen w-screen flex">
+
+        <aside id="sidebar" class="w-72 bg-white border-r border-gray-200 flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out">
+            <div class="flex-grow flex flex-col p-4 space-y-4 overflow-y-hidden">
+                <button id="new-chat-btn" class="flex items-center w-full gap-3 p-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                    <span class="font-semibold">New Chat</span>
+                </button>
+                <div class="pt-2">
+                    <h2 id="greeting" class="text-2xl font-bold">Good afternoon, User</h2>
+                    <p class="text-sm text-gray-500">Welcome back to your space.</p>
+                </div>
+                <div class="pt-4">
+                    <h3 class="text-xs font-semibold uppercase text-gray-500 tracking-wider">Current Mood</h3>
+                    <div id="mood-status" class="mt-2 p-2 rounded-md text-center font-semibold"></div>
+                </div>
+                <div class="flex-grow flex flex-col min-h-0 pt-4">
+                    <h3 class="text-xs font-semibold uppercase text-gray-500 tracking-wider mb-2">Recent Chats</h3>
+                    <div id="chats-container" class="flex-grow overflow-y-auto custom-scrollbar -mr-4 pr-4">
+                        </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-200">
+                <button id="logout-btn" class="flex items-center w-full gap-3 p-3 rounded-lg bg-gray-100 text-gray-700 hover:bg-red-500 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></svg>
+                    <span class="font-semibold">Logout</span>
+                </button>
+            </div>
+        </aside>
+        
+        <main id="main-content" class="w-full flex-grow flex flex-col h-screen bg-white">
+            <header class="flex items-center p-4 border-b border-gray-200 flex-shrink-0">
+                <button id="menu-toggle-btn" class="p-2 rounded-md text-gray-500 hover:bg-gray-100 mr-4">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+                </button>
+                <h1 class="text-xl font-semibold">MindfulAI</h1>
+            </header>
+
+            <div class="flex-grow flex flex-col relative overflow-hidden">
+                <div id="start-screen" class="flex-grow flex flex-col items-center justify-center text-center p-4 transition-opacity duration-300 opacity-0">
+                    <img src="../favicon.png" alt="MindfulAI Logo" class="w-16 h-16 mb-4 rounded-full shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-600">How can I help you today?</h2>
+                </div>
+                <div id="chat-messages" class="p-6 flex flex-col gap-6 overflow-y-auto custom-scrollbar absolute inset-0 transition-opacity duration-300 opacity-0">
+                    </div>
+            </div>
+            
+             <div id="input-area" class="p-4 border-t border-gray-200 flex-shrink-0 bg-white">
+                <div class="max-w-4xl mx-auto">
+                    <form id="message-form" class="flex items-center gap-4">
+                        <input id="message-input" type="text" placeholder="Type your thoughts here..." autocomplete="off" class="w-full bg-gray-100 p-4 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button type="submit" class="p-4 rounded-lg bg-blue-600 hover:bg-blue-500 transition-colors">
+                            <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" /></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- UI Elements ---
+            const sidebar = document.getElementById('sidebar');
+            const menuToggleBtn = document.getElementById('menu-toggle-btn');
+            const messageForm = document.getElementById('message-form');
+            const messageInput = document.getElementById('message-input');
+            const startScreen = document.getElementById('start-screen');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatsContainer = document.getElementById('chats-container');
+            const moodStatus = document.getElementById('mood-status');
+            const newChatBtn = document.getElementById('new-chat-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const greetingElement = document.getElementById('greeting');
+            
+            // --- State & Data Store ---
+            let chats = {};
+            let currentChatId = null;
+            const userIconSVG = `<svg class="w-full h-full text-white p-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg>`;
+
+            // --- LOCAL STORAGE ---
+            const saveState = () => {
+                localStorage.setItem('mindfulAI_chats', JSON.stringify(chats));
+                localStorage.setItem('mindfulAI_currentChatId', currentChatId);
+            };
+            const loadState = () => {
+                const savedChats = localStorage.getItem('mindfulAI_chats');
+                const savedCurrentChatId = localStorage.getItem('mindfulAI_currentChatId');
+                if (savedChats) {
+                    chats = JSON.parse(savedChats);
+                    currentChatId = savedCurrentChatId;
+                }
+            };
+
+            // --- Sidebar & Navigation ---
+            const initializeSidebar = () => {
+                if (window.innerWidth < 1024) sidebar.classList.add('-ml-72');
+            };
+            menuToggleBtn.addEventListener('click', () => sidebar.classList.toggle('-ml-72'));
+            const renderSidebar = () => {
+                chatsContainer.innerHTML = '';
+                Object.keys(chats).sort((a, b) => b - a).forEach(chatId => {
+                    const chat = chats[chatId];
+                    const chatDiv = document.createElement('div');
+                    chatDiv.className = `p-3 rounded-lg cursor-pointer text-gray-700 hover:bg-gray-100 truncate`;
+                    if (chatId === currentChatId) {
+                        chatDiv.className = `p-3 rounded-lg cursor-pointer bg-blue-600 text-white truncate`;
+                    }
+                    chatDiv.textContent = chat.title;
+                    chatDiv.dataset.chatId = chatId;
+                    chatsContainer.appendChild(chatDiv);
+                });
+            };
+            chatsContainer.addEventListener('click', (e) => {
+                const chatDiv = e.target.closest('[data-chat-id]');
+                if (chatDiv) loadChat(chatDiv.dataset.chatId);
+            });
+
+            // --- Core Application Logic ---
+            const setViewState = (state) => {
+                if (state === 'start') {
+                    startScreen.classList.remove('opacity-0', 'hidden');
+                    chatMessages.classList.add('opacity-0');
+                } else { // state === 'chat'
+                    startScreen.classList.add('opacity-0');
+                    setTimeout(() => {
+                        startScreen.classList.add('hidden');
+                    }, 300);
+                    chatMessages.classList.remove('opacity-0');
+                }
+            };
+            const loadChat = (chatId) => {
+                currentChatId = chatId;
+                const chat = chats[chatId];
+                chatMessages.innerHTML = '';
+
+                if (chat.messages.length > 0) {
+                    setViewState('chat');
+                    chat.messages.forEach(msg => addMessage(msg.text, msg.sender, false));
+                } else {
+                    setViewState('start');
+                }
+                renderSidebar();
+                saveState();
+            };
+            const createNewChat = () => {
+                const newChatId = Date.now().toString();
+                chats[newChatId] = { title: "New Chat", messages: [] };
+                loadChat(newChatId);
+                if (window.innerWidth < 1024) sidebar.classList.add('-ml-72');
+            };
+            newChatBtn.addEventListener('click', createNewChat);
+            logoutBtn.addEventListener('click', () => window.location.href = '../index.html');
+
+            // --- Chat Messaging & Animations ---
+            const addMessage = (text, sender, animate = true) => {
+                const isUser = sender === 'user';
+                const messageContainer = document.createElement('div');
+                messageContainer.className = `flex items-start gap-4 ${isUser ? 'justify-end' : ''} ${animate ? 'opacity-0 transform translate-y-4 transition-all duration-300' : ''}`;
+                const avatar = `<div class="w-8 h-8 rounded-full flex-shrink-0 ${isUser ? 'bg-blue-600' : 'bg-transparent'}">${isUser ? userIconSVG : `<img src="../favicon.png" class="w-full h-full rounded-full" alt="AI Avatar">`}</div>`;
+                const bubble = `<div class="max-w-xl p-4 rounded-2xl ${isUser ? 'rounded-br-none bg-blue-600 text-white' : 'rounded-tl-none bg-gray-200 text-gray-800'}">${text}</div>`;
+                messageContainer.innerHTML = isUser ? bubble + avatar : avatar + bubble;
+                chatMessages.appendChild(messageContainer);
+                if (animate) setTimeout(() => messageContainer.classList.remove('opacity-0', 'translate-y-4'), 50);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            };
+
+            messageForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const userInput = messageInput.value.trim();
+                if (!userInput || !currentChatId) return;
+
+                const isFirstMessage = chats[currentChatId].messages.length === 0;
+
+                if (isFirstMessage) {
+                    setViewState('chat');
+                    chats[currentChatId].title = userInput.substring(0, 30) + (userInput.length > 30 ? '...' : '');
+                    renderSidebar();
+                }
+
+                addMessage(userInput, 'user');
+                chats[currentChatId].messages.push({ sender: 'user', text: userInput });
+                messageInput.value = '';
+                saveState();
+
+                setTimeout(() => {
+                    const aiResponse = "That makes sense. Can you tell me more about that feeling?";
+                    addMessage(aiResponse, 'ai');
+                    chats[currentChatId].messages.push({ sender: 'ai', text: aiResponse });
+                    saveState();
+                }, 1200);
+            });
+            
+            // --- Initialization ---
+            const initializeApp = () => {
+                const greetingElement = document.getElementById('greeting');
+                const currentHour = new Date().getHours();
+                greetingElement.textContent = currentHour < 12 ? 'Good morning, User' : currentHour < 17 ? 'Good afternoon, User' : 'Good evening, User';
+                const moodStatus = document.getElementById('mood-status');
+                const moodClasses = { happy: 'bg-green-500 text-white', sad: 'bg-blue-500 text-white', upset: 'bg-yellow-400 text-yellow-900', angry: 'bg-orange-500 text-white', suicidal: 'bg-red-500 text-white animate-pulse' };
+                window.setMood = (mood) => {
+                    Object.values(moodClasses).forEach(c => moodStatus.classList.remove(...c.split(' ')));
+                    const classes = moodClasses[mood] || moodClasses.happy;
+                    moodStatus.classList.add(...classes.split(' '));
+                    moodStatus.textContent = mood.charAt(0).toUpperCase() + mood.slice(1);
+                };
+                setMood('happy');
+                initializeSidebar();
+                loadState();
+                if (!currentChatId || !chats[currentChatId]) {
+                    createNewChat();
+                } else {
+                    loadChat(currentChatId);
+                }
+            };
+            initializeApp();
+        });
+    </script>
+</body>
+</html>
