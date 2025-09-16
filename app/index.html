@@ -206,7 +206,7 @@
                 saveState();
 
                 setTimeout(() => {
-                    const aiResponse = "That makes sense. Can you tell me more about that feeling?";
+                    const aiResponse = "This is still in production mode. Your message was: " + userInput;
                     addMessage(aiResponse, 'ai');
                     chats[currentChatId].messages.push({ sender: 'ai', text: aiResponse });
                     saveState();
