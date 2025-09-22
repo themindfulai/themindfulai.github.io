@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindfulAI</title>
+    <title>The MindfulAI</title>
     <link rel="icon" href="../favicon.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,12 +55,12 @@
                 <button id="menu-toggle-btn" class="p-2 rounded-md text-gray-500 hover:bg-gray-100 mr-4">
                     <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
                 </button>
-                <h1 class="text-xl font-semibold">MindfulAI</h1>
+                <h1 class="text-xl font-semibold">The MindfulAI</h1>
             </header>
 
             <div class="flex-grow flex flex-col relative overflow-hidden">
                 <div id="start-screen" class="flex-grow flex flex-col items-center justify-center text-center p-4 transition-opacity duration-300 opacity-0">
-                    <img src="../favicon.png" alt="MindfulAI Logo" class="w-16 h-16 mb-4 rounded-full shadow-md">
+                    <img src="../favicon.png" alt="The MindfulAI Logo" class="w-16 h-16 mb-4 rounded-full shadow-md">
                     <h2 class="text-2xl font-bold text-gray-600">How can I help you today?</h2>
                 </div>
                 <div id="chat-messages" class="p-6 flex flex-col gap-6 overflow-y-auto custom-scrollbar absolute inset-0 transition-opacity duration-300 opacity-0">
@@ -102,12 +102,12 @@
 
             // --- LOCAL STORAGE ---
             const saveState = () => {
-                localStorage.setItem('mindfulAI_chats', JSON.stringify(chats));
-                localStorage.setItem('mindfulAI_currentChatId', currentChatId);
+                localStorage.setItem('The MindfulAI_chats', JSON.stringify(chats));
+                localStorage.setItem('The MindfulAI_currentChatId', currentChatId);
             };
             const loadState = () => {
-                const savedChats = localStorage.getItem('mindfulAI_chats');
-                const savedCurrentChatId = localStorage.getItem('mindfulAI_currentChatId');
+                const savedChats = localStorage.getItem('The MindfulAI_chats');
+                const savedCurrentChatId = localStorage.getItem('The MindfulAI_currentChatId');
                 if (savedChats) {
                     chats = JSON.parse(savedChats);
                     currentChatId = savedCurrentChatId;
