@@ -1,0 +1,9 @@
+{
+  "responses": [
+    { "intent": "stress_school", "patterns": ["homework","exam","test","deadline","project","school stress","overwhelmed with school"], "templates": ["School pressure can stack up quickly. What part feels heaviest right now—time, expectations, or something else?","It sounds like school demands are piling up. Breaking tasks into the smallest next step can reduce the mental load. What's one tiny step you could take?"] },
+    { "intent": "friend_conflict", "patterns": ["argument","fight","friend","fell out","ignored","drama"], "templates": ["Friend conflicts can sting because connection matters. What do you wish they understood about how you feel?","It makes sense that this is lingering for you. Would it help to sort what you can control from what you can't?"] },
+    { "intent": "anxiety_general", "patterns": ["anxious","nervous","worried","panic","overthinking"], "templates": ["Anxiety often pulls you toward future what-ifs. Can we anchor in one fact you know is true right now?","Your nervous system is signaling threat. Sometimes labeling it—'I'm feeling anxious'—creates a bit of space. What's the thought looping?"] },
+    { "intent": "low_mood", "patterns": ["sad","empty","tired","low","down"], "templates": ["Feeling low can make everything heavier. Is there one small action that normally gives you even a 1% lift?","You're noticing a dip in mood. That awareness itself is a strength. Do you recall when you first felt the shift today?"] },
+    { "intent": "positive_moment", "patterns": ["excited","proud","happy","good news"], "templates": ["That's great to hear. What personal strength helped that happen?","I love that you're noticing this positive moment. How could you savor it a little longer?"] }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "positive": { "happy": 1.2, "excited": 1.3, "proud": 1.1, "glad": 0.9, "calm": 0.8, "relieved": 1.0 },
+  "negative": { "sad": 1.4, "down": 1.0, "empty": 1.2, "hopeless": 1.5, "worthless": 1.6, "angry": 1.2, "mad": 1.1 },
+  "stress": { "anxious": 1.5, "worried": 1.3, "panic": 1.6, "overthinking": 1.4, "stressed": 1.5, "pressure": 1.2, "deadline": 1.0 }
+}
