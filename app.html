@@ -9,6 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="config.js"></script>
   <script src="js/model.js"></script>
+  <script src="js/gen_model.js"></script>
+  <script src="js/gpt_model.js"></script>
+  <script src="js/gpt_weights_loader.js"></script>
   <style>
     body { font-family: 'Inter', sans-serif; }
     .custom-scrollbar::-webkit-scrollbar { width: 8px; }
@@ -93,15 +96,22 @@
   const createNewChat=()=>{const id=Date.now().toString();chats[id]={title:'New Chat',messages:[]};loadChat(id);if(window.innerWidth<1024)sidebar.classList.add('-ml-72');};
   newChatBtn.addEventListener('click',createNewChat);
   const addMessage=(text,sender,animate=true)=>{const isUser=sender==='user';const container=document.createElement('div');container.className=`flex items-start gap-4 ${isUser?'justify-end':''} ${animate?'opacity-0 transform translate-y-4':''} transition-all duration-300`;const avatar=`<div class="w-8 h-8 rounded-full flex-shrink-0 ${isUser?'bg-blue-600':'bg-transparent'}">${isUser?userIconSVG:'<img src="static/favicon.png" class="w-full h-full rounded-full" alt="AI" />'}</div>`;const bubble=`<div class="max-w-xl p-4 rounded-2xl ${isUser?'rounded-br-none bg-blue-600 text-white':'rounded-tl-none bg-gray-200 text-gray-800'}">${text}</div>`;container.innerHTML=isUser?bubble+avatar:avatar+bubble;chatMessages.appendChild(container);if(animate)setTimeout(()=>container.classList.remove('opacity-0','translate-y-4'),50);chatMessages.scrollTop=chatMessages.scrollHeight;};
-  const setMood=m=>{const classes={positive:'bg-green-500 text-white',negative:'bg-blue-500 text-white',stress:'bg-yellow-400 text-yellow-900',default:'bg-gray-300 text-gray-800'};Object.values(classes).forEach(c=>moodStatus.classList.remove(...c.split(' ')));const cls=classes[m]||classes.default;moodStatus.classList.add(...cls.split(' '));moodStatus.textContent=m?m.charAt(0).toUpperCase()+m.slice(1):'Neutral';};
+  const setMood=m=>{const classes={positive:'bg-green-500 text-white',negative:'bg-blue-500 text-white',stress:'bg-yellow-400 text-yellow-900',depressed:'bg-blue-500 text-white',suicidal:'bg-red-600 text-white',happy:'bg-green-500 text-white',sad:'bg-blue-500 text-white',default:'bg-gray-300 text-gray-800'};Object.values(classes).forEach(c=>moodStatus.classList.remove(...c.split(' ')));const mapped = (m==='happy')?'positive':(m==='sad')?'negative':m;const cls=classes[mapped]||classes.default;moodStatus.classList.add(...cls.split(' '));moodStatus.textContent=m?m.charAt(0).toUpperCase()+m.slice(1):'Neutral';};
   messageForm.addEventListener('submit',async e=>{e.preventDefault();const userInput=messageInput.value.trim();if(!userInput||!currentChatId)return;if(chats[currentChatId].messages.length===0){setViewState('chat');chats[currentChatId].title=userInput.substring(0,30)+(userInput.length>30?'...':'');}
     addMessage(userInput,'user');chats[currentChatId].messages.push({sender:'user',text:userInput});messageInput.value='';renderSidebar();saveState();
     try{
       let data;
       if(CFG.MODE === 'local' && window.MindfulLocalModel){
         data = await window.MindfulLocalModel.predict(userInput, chats[currentChatId].messages);
+      } else if(CFG.MODE === 'gen' && window.MindfulGenModel){
+        data = await window.MindfulGenModel.predict(userInput, chats[currentChatId].messages);
+      } else if(CFG.MODE === 'gpt' && window.MindfulMiniGPT){
+        data = await window.MindfulMiniGPT.predict(userInput, chats[currentChatId].messages);
       } else {
-        throw new Error('Local model not initialized');
+        throw new Error('Local model not initialized for mode '+CFG.MODE);
+      }
+      if(data.prediction === 'suicidal') {
+        data.response_text = 'I hear that you might be feeling in crisis. I cannot provide emergency help, but you deserve immediate support. If you are in danger or thinking about harming yourself, please contact a trusted adult, local emergency services, or a crisis hotline in your area right now.';
       }
       const aiText=data.response_text||"I'm not sure how to respond to that.";const mood=data.prediction||'default';
       addMessage(aiText,'ai');chats[currentChatId].messages.push({sender:'ai',text:aiText});setMood(mood);saveState();
