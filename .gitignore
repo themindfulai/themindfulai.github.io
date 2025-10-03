@@ -1,0 +1,35 @@
+# ---- Data & Cache Exclusions ----
+# Large raw dataset sources (do NOT push multi-GB Open-Orca or temporary shards)
+training/datasets/raw/openorca/
+training/datasets/raw/*_shard_*.jsonl
+training/datasets/raw/*.parquet
+raw/
+
+# Intermediate processed variants (keep only final unified/distilled if you want)
+training/datasets/processed/distilled_pairs_temp.jsonl
+training/datasets/processed/*cache*
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pt
+*.ckpt
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Colab / notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+*.log
+data/corpus_full.txt
+
+# Keep final artifacts (manifest + weights) for web app
+!weights/manifest.json
+!weights/weights.bin
+!data/char_vocab.json
